@@ -3,284 +3,143 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ChatGPT 繪圖指令產生器</title>
+<title>ChatGPT 修改圖檔指令產生器</title>
 <style>
 :root{--bg:#f7f6f2;--card:#fff;--tx:#1f1f1c;--mu:#6b6a63;--bd:#e2e0d8;--ac:#10a37f;--acx:#fff;--chip:#efede6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171716;--card:#222220;--tx:#eeede8;--mu:#a09f96;--bd:#37362f;--ac:#19c37d;--acx:#06281c;--chip:#2c2b27}}
 :root[data-theme="dark"]{--bg:#171716;--card:#222220;--tx:#eeede8;--mu:#a09f96;--bd:#37362f;--ac:#19c37d;--acx:#06281c;--chip:#2c2b27}
 *{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.6 system-ui,-apple-system,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif}
-.wrap{max-width:1000px;margin:0 auto;padding:20px 16px 40px}
-h1{font-size:22px;margin:0 0 4px}p.sub{margin:0 0 18px;color:var(--mu)}
-.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
-@media(max-width:780px){.grid{grid-template-columns:1fr}}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px}
-.g{margin-bottom:14px}.g label,.g .l{display:block;font-weight:600;font-size:13px;margin-bottom:6px}
-.g small{color:var(--mu);font-weight:400}
-textarea,input[type=text]{width:100%;border:1px solid var(--bd);background:var(--bg);color:var(--tx);border-radius:10px;padding:9px 11px;font:inherit;resize:vertical}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{border:1px solid var(--bd);background:var(--chip);color:var(--tx);border-radius:999px;padding:4px 12px;font:inherit;font-size:13px;cursor:pointer}
-.chip.on{background:var(--ac);color:var(--acx);border-color:var(--ac)}
-.row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-.btn{border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;padding:8px 14px;font:inherit;cursor:pointer}
-.btn.p{background:var(--ac);color:var(--acx);border-color:var(--ac);font-weight:600}
-.seg{display:inline-flex;border:1px solid var(--bd);border-radius:10px;overflow:hidden;margin-bottom:10px}
-.seg button{border:0;background:var(--card);color:var(--tx);padding:6px 14px;font:inherit;cursor:pointer}
-.seg button.on{background:var(--ac);color:var(--acx)}
-#out{white-space:pre-wrap;background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:12px;min-height:200px}
+.wrap{max-width:1040px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:22px;margin:0 0 4px}p.sub{margin:0 0 16px;color:var(--mu)}
+.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:16px}
+@media(max-width:800px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;margin-bottom:14px}
 .side{position:sticky;top:12px;align-self:start}
-.hint{color:var(--mu);font-size:12px;margin-top:8px}
-.tabs{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0 6px}
-.tabs button{border:0;background:none;color:var(--mu);font:inherit;font-size:13px;padding:2px 8px;border-radius:6px;cursor:pointer}
-.tabs button.on{background:var(--chip);color:var(--tx);font-weight:600}
-.rf{border:1px dashed var(--bd);background:var(--card);color:var(--tx);border-radius:999px;padding:3px 11px;font:inherit;font-size:12.5px;cursor:pointer;text-align:left}
-.ref{border:1px dashed var(--bd);background:var(--card);color:var(--tx);border-radius:999px;padding:3px 11px;font:inherit;font-size:12.5px;cursor:pointer;text-align:left}
-.ref:hover,.rf:hover{border-color:var(--ac);color:var(--ac)}
-.rl{font-size:12px;color:var(--mu);margin-top:8px}
+.l{display:block;font-weight:600;font-size:13px;margin-bottom:6px}.l small,.hint{color:var(--mu);font-weight:400}
+.hint{font-size:12px;margin-top:8px}
+input[type=text]{width:100%;border:1px solid var(--bd);background:var(--bg);color:var(--tx);border-radius:10px;padding:8px 11px;font:inherit}
+input[type=file]{width:100%;color:var(--tx);font-size:13px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{border:1px solid var(--bd);background:var(--chip);color:var(--tx);border-radius:999px;padding:3px 11px;font:inherit;font-size:12.5px;cursor:pointer}
+.chip.on{background:var(--ac);color:var(--acx);border-color:var(--ac)}
+.btn{border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;padding:7px 12px;font:inherit;font-size:13.5px;cursor:pointer}
+.btn.p{background:var(--ac);color:var(--acx);border-color:var(--ac);font-weight:600}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+#pv{display:none;max-width:100%;max-height:220px;border-radius:10px;margin-top:10px;object-fit:contain}
+.op{border:1px solid var(--bd);border-radius:12px;margin-bottom:8px;background:var(--bg)}
+.oh{width:100%;text-align:left;border:0;background:none;color:var(--tx);font:inherit;font-weight:600;padding:10px 12px;cursor:pointer;display:flex;justify-content:space-between}
+.op.on{border-color:var(--ac)}.op.on .oh{color:var(--ac)}
+.ob{display:none;padding:0 12px 12px}.op.on .ob{display:block}
+.fl{font-size:12.5px;margin:8px 0 0;color:var(--mu)}
+.seg{display:inline-flex;border:1px solid var(--bd);border-radius:10px;overflow:hidden;margin-bottom:10px}
+.seg button{border:0;background:var(--card);color:var(--tx);padding:6px 14px;font:inherit;cursor:pointer}.seg button.on{background:var(--ac);color:var(--acx)}
+#out{white-space:pre-wrap;background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:12px;min-height:200px}
+.frow{display:flex;align-items:center;gap:10px}.frow input{flex:1;accent-color:var(--ac)}
 </style>
 </head>
 <body>
 <div class="wrap">
-<h1>🎨 ChatGPT 繪圖指令產生器</h1>
-<p class="sub">選一選、填一填，自動組合出可直接貼進 ChatGPT 的畫圖提示詞。</p>
-<div class="rl" style="margin:0 0 6px">✨ 快速主題（點一下套用整組設定）</div>
-<div class="row" id="presets"></div>
+<h1>🖌️ ChatGPT 修改圖檔指令產生器</h1>
+<p class="sub">先上傳要修改的圖，再勾選想做的修改，自動組合出可貼進 ChatGPT 的編輯指令。</p>
 <div class="grid">
-<div class="card" id="form">
-<div class="g"><label for="subj">① 主體／畫面內容 <small>（必填，越具體越好）</small></label>
-<textarea id="subj" rows="3" placeholder="例如：一隻戴著飛行員護目鏡的橘貓，坐在老式飛機的駕駛艙裡"></textarea>
-<div class="rl">💡 青少年靈感（點一下帶入，可再修改）</div>
-<div class="tabs" id="subjTabs"></div><div class="chips" id="subjRef"></div></div>
-<div class="g"><label for="scene">② 場景／背景 <small>（選填）</small></label>
-<input type="text" id="scene" placeholder="例如：黃昏的雲海上方">
-<div class="rl">💡 場景靈感</div>
-<div class="chips" id="sceneRef" style="margin-top:6px"></div></div>
-<div id="groups"></div>
-<div class="g"><label for="extra">補充細節 <small>（選填：畫面上的文字、特定元素…）</small></label>
-<input type="text" id="extra" placeholder="例如：招牌上寫著「Hello Taipei」"></div>
-<div class="g"><label for="neg">避免出現 <small>（選填）</small></label>
-<input type="text" id="neg" placeholder="例如：多餘的手指、模糊、浮水印"></div>
+<div>
+<div class="card">
+<span class="l">① 上傳要修改的原圖 <small>（只在你的瀏覽器預覽，不會上傳）</small></span>
+<input type="file" id="fi" accept="image/*"><img id="pv" alt="原圖預覽">
+<div class="hint">到 ChatGPT 時，請把同一張圖附加上去，再貼上右側指令。</div>
+</div>
+<div class="card">
+<span class="l">✨ 快速範本 <small>（點一下套用）</small></span>
+<div class="row" id="pre"></div>
+</div>
+<div class="card">
+<span class="l">② 選擇要做的修改 <small>（可同時選多項，點標題展開）</small></span>
+<div id="ops"></div>
+</div>
+<div class="card">
+<span class="l">③ 請保持不變 <small>（可複選）</small></span>
+<div class="chips" id="kp" style="margin:0 0 12px"></div>
+<span class="l">④ 修改幅度 <small id="sv">50</small></span>
+<div class="frow"><small>輕微微調</small><input type="range" id="sl" min="10" max="100" value="50"><small>大幅改造</small></div>
+<span class="l" style="margin-top:12px">補充要求 <small>（選填）</small></span>
+<input type="text" id="ex" placeholder="例如：保持原圖的溫暖氣氛">
+<span class="l" style="margin-top:12px">避免出現 <small>（選填）</small></span>
+<input type="text" id="ng" placeholder="例如：模糊、變形的手、多餘文字">
+</div>
 </div>
 <div class="side card">
-<div class="seg" id="lang"><button data-v="zh" class="on">中文指令</button><button data-v="en">English</button></div>
+<div class="seg" id="lg"><button data-v="zh" class="on">中文指令</button><button data-v="en">English</button></div>
 <div id="out"></div>
-<div class="row" style="margin:12px 0 0">
-<button class="btn p" id="copy">複製指令</button>
-<button class="btn" id="rand">🎲 隨機靈感</button>
-<button class="btn" id="reset">清除</button></div>
-<div class="hint" id="msg">貼到 ChatGPT 對話框送出即可；不滿意可再說「改成更溫暖的色調」之類微調。</div>
+<div class="row" style="margin-top:12px"><button class="btn p" id="cp">複製指令</button><button class="btn" id="rs">清除全部</button></div>
+<div class="hint" id="ms"><b>步驟：</b>① 在 ChatGPT 上傳原圖 → ② 貼上指令送出 → ③ 不滿意可追加「再自然一點」「改動小一點」微調。</div>
 </div>
-</div>
-<div class="card" id="fuse" style="margin-top:16px">
-<style>
-.fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0 14px}
-@media(max-width:780px){.fgrid{grid-template-columns:1fr}}
-.slot{border:1px dashed var(--bd);border-radius:12px;padding:10px;background:var(--bg)}
-.slot b{font-size:13px}.slot img{display:none;width:100%;height:150px;object-fit:cover;border-radius:8px;margin:8px 0 4px}
-.slot input[type=file]{width:100%;font-size:12px;margin:6px 0 4px;color:var(--tx)}
-.fc{border:1px solid var(--bd);background:var(--chip);color:var(--tx);border-radius:999px;padding:4px 12px;font:inherit;font-size:13px;cursor:pointer}
-.fc.on{background:var(--ac);color:var(--acx);border-color:var(--ac)}
-.fout{white-space:pre-wrap;background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:12px;min-height:120px}
-.frow{display:flex;align-items:center;gap:10px}.frow input[type=range]{flex:1;accent-color:var(--ac)}
-</style>
-<h2 style="font-size:18px;margin:0 0 2px">🧬 風格融合模式</h2>
-<p class="sub" style="margin:0">上傳「主圖」＋ 1～2 張「風格圖」，產生給 ChatGPT 的融合指令。圖片只在你的瀏覽器預覽，不會被上傳。</p>
-<div class="fgrid">
-<div class="slot"><b>① 主圖 *</b><br><input type="file" accept="image/*" id="fM"><img id="fMp" alt="主圖預覽"><div class="hint">保留的主體與構圖</div></div>
-<div class="slot"><b>② 風格圖 A *</b><br><input type="file" accept="image/*" id="fA"><img id="fAp" alt="風格圖A預覽"><input type="text" id="fAn" placeholder="風格名稱（選填，例如：吉卜力水彩）"></div>
-<div class="slot"><b>③ 風格圖 B <small>（選填）</small></b><br><input type="file" accept="image/*" id="fB"><img id="fBp" alt="風格圖B預覽"><input type="text" id="fBn" placeholder="風格名稱（選填，例如：賽博龐克）"></div>
-</div>
-<div class="grid">
-<div>
-<div class="g"><span class="l">學習風格圖的哪些特徵 <small>（可複選）</small></span><div class="chips" id="fAs"></div></div>
-<div class="g"><span class="l">風格化強度 <small id="fSv">60</small></span><div class="frow"><small>輕微</small><input type="range" id="fS" min="10" max="200" value="60"><small>極致</small></div></div>
-<div class="g" id="fBw" style="display:none"><span class="l">風格 A 比例 <small id="fRv">50% A ／ 50% B</small></span><div class="frow"><small>偏 B</small><input type="range" id="fRt" min="10" max="90" value="50"><small>偏 A</small></div></div>
-<div class="g"><label for="fR2">圖片比例</label><select id="fR2" style="width:100%;padding:8px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font:inherit"><option value="">不指定（跡隨主圖）</option><option>1:1</option><option>2:3</option><option>3:2</option><option>9:16</option><option>16:9</option></select></div>
-<div class="g"><label for="fX">補充要求 <small>（選填）</small></label><input type="text" id="fX" placeholder="例如：人物表情保持不變、背景更夢幻"></div>
-<div class="g"><label for="fN">避免出現 <small>（選填）</small></label><input type="text" id="fN" placeholder="例如：模糊、文字、多餘手指"></div>
-</div>
-<div>
-<div class="seg" id="fL"><button data-v="zh" class="on">中文指令</button><button data-v="en">English</button></div>
-<div class="fout" id="fO"></div>
-<div class="row" style="margin:12px 0 0"><button class="btn p" id="fCopy">複製融合指令</button></div>
-<div class="hint" id="fMsg"><b>使用步驟：</b>① 在 ChatGPT 對話框按鐘形附件，依序上傳「主圖 → 風格圖 A → 風格圖 B」（順序要跟指令一致）；② 貼上指令送出；③ 不滿意可再說「風格再強一點」或「更保留主圖」。</div>
 </div>
 </div>
 <script>
-(function(){
-var F=function(i){return document.getElementById(i)},fl='zh',urls={};
-var AS=[['色彩配色','color palette'],['筆觸與線條','brushwork and line quality'],['材質與質感','texture and material feel'],['光影與氛圍','lighting and atmosphere'],['構圖與鏡頭','composition and camera angle']],on=[0,1,3];
-F('fAs').innerHTML=AS.map(function(a,i){return '<button class="fc'+(on.indexOf(i)>-1?' on':'')+'" data-i="'+i+'">'+a[0]+'</button>'}).join('');
-F('fAs').onclick=function(e){var b=e.target.closest('.fc');if(!b)return;var i=+b.dataset.i,p=on.indexOf(i);if(p>-1)on.splice(p,1);else on.push(i);b.classList.toggle('on');gen()};
-['fM','fA','fB'].forEach(function(id){F(id).onchange=function(){var f=this.files[0],im=F(id+'p');if(urls[id])URL.revokeObjectURL(urls[id]);if(f){urls[id]=URL.createObjectURL(f);im.src=urls[id];im.style.display='block'}else{urls[id]=0;im.style.display='none'}gen()}});
-['fAn','fBn','fX','fN','fS','fRt','fR2'].forEach(function(id){F(id).addEventListener('input',gen);F(id).addEventListener('change',gen)});
-F('fL').onclick=function(e){var b=e.target.closest('button');if(!b)return;fl=b.dataset.v;this.querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===b)});gen()};
-function gen(){var v=function(i){return F(i).value.trim()},z=fl==='zh',hM=!!urls.fM,hA=!!urls.fA,hB=!!urls.fB,s=+F('fS').value,r=+F('fRt').value;
-F('fBw').style.display=hB?'block':'none';F('fSv').textContent=s+(s>100?'（強化區 +'+(s-100)+'）':'');F('fRv').textContent=r+'% A ／ '+(100-r)+'% B';
-if(!hM||!hA){F('fO').textContent=z?'請先上傳「主圖」與「風格圖 A」，指令會在這裡產生（風格圖 B 可不填）。':'Upload the main image and style image A to generate the prompt (style image B is optional).';return}
-var as=on.map(function(i){return AS[i][z?0:1]}).join(z?'、':', ')||(z?'整體視覺風格':'overall visual style'),nA=v('fAn'),nB=v('fBn'),t=[],
-w=s<35?(z?'輕微':'subtle'):s<70?(z?'中等':'moderate'):s<=100?(z?'強烈':'strong'):s<=150?(z?'極強，超越一般強度':'very strong, beyond the normal level'):(z?'極致強化，風格特徵要非常誇張、鮮明，幾乎完全風格化':'maximum, extremely exaggerated and vivid, almost fully stylized');
-if(z){t.push('請根據我依序上傳的 '+(hB?3:2)+' 張圖片，生成一張全新的融合圖片：');
-t.push('1. 第 1 張【主圖】：保留主要主體、人物／物件與基本構圖。');
-t.push('2. 第 2 張【風格圖 A】'+(nA?'（'+nA+'）':'')+'：學習它的'+as+'。');
-if(hB){t.push('3. 第 3 張【風格圖 B】'+(nB?'（'+nB+'）':'')+'：同樣學習它的'+as+'。');t.push('融合比例：風格 A 約 '+r+'%、風格 B 約 '+(100-r)+'%，自然混合成一種和諧的新風格，不要只是拼貼或左右並排。')}
-t.push('整體風格化程度：'+w+'（'+s+'%）。');
-if(v('fX'))t.push('補充要求：'+v('fX')+'。');if(v('fN'))t.push('請避免：'+v('fN')+'。');
-if(F('fR2').value)t.push('圖片比例：'+F('fR2').value+'。');
-t.push('請直接生成圖片，不要直接複製原圖，也不要加入浮水印。')}
-else{t.push('Using the '+(hB?3:2)+' images I upload in order, create one brand-new fused image:');
-t.push('1. Image 1 is the MAIN image: keep its main subject, characters/objects and basic composition.');
-t.push('2. Image 2 is STYLE image A'+(nA?' ('+nA+')':'')+': learn its '+as+'.');
-if(hB){t.push('3. Image 3 is STYLE image B'+(nB?' ('+nB+')':'')+': also learn its '+as+'.');t.push('Blend ratio: about '+r+'% style A and '+(100-r)+'% style B, merged naturally into one harmonious new style, not a collage or side-by-side layout.')}
-t.push('Overall stylization strength: '+w+' ('+s+'%).');
-if(v('fX'))t.push('Extra requirements: '+v('fX')+'.');if(v('fN'))t.push('Avoid: '+v('fN')+'.');
-if(F('fR2').value)t.push('Aspect ratio: '+F('fR2').value+'.');
-t.push('Generate the image directly; do not simply copy the original images and add no watermark.')}
-F('fO').textContent=t.join('\n')}
-F('fCopy').onclick=function(){var t=F('fO').textContent,m=F('fMsg');function fb(){var r=document.createRange();r.selectNodeContents(F('fO'));var q=getSelection();q.removeAllRanges();q.addRange(r);try{document.execCommand('copy');m.textContent='✅ 已複製！記得先在 ChatGPT 依序上傳圖片再貼上。'}catch(x){m.textContent='請手動選取文字複製'}}
-try{navigator.clipboard.writeText(t).then(function(){m.textContent='✅ 已複製！記得先在 ChatGPT 依序上傳圖片再貼上。'},fb)}catch(x){fb()}};
-gen();
-})();
-</script>
-</div>
-</div>
-<script>
-var D=[
-{k:'style',t:'③ 藝術風格',m:0,o:[['寫實攝影','photorealistic photography'],['日系動畫','Japanese anime style'],['吉卜力水彩','Ghibli-inspired watercolor'],['3D 皮克斯風','Pixar-style 3D render'],['油畫','oil painting'],['水墨國畫','Chinese ink wash painting'],['像素藝術','pixel art'],['扁平插畫','flat vector illustration'],['賽博龐克','cyberpunk'],['浮世繪','ukiyo-e woodblock print'],['黏土動畫','claymation'],['手繪素描','pencil sketch']]},
-{k:'mood',t:'④ 氛圍情緒',m:1,o:[['溫馨','warm and cozy'],['夢幻','dreamy'],['神秘','mysterious'],['史詩壯闊','epic and grand'],['寧靜','serene'],['活潑歡樂','playful and joyful'],['憂鬱','melancholic'],['懷舊','nostalgic'],['療癒','healing and comforting'],['熱血','passionate and energetic'],['搞笑','humorous and whimsical'],['浪漫','romantic'],['緊張刺激','thrilling and suspenseful']]},
-{k:'color',t:'⑤ 色調',m:1,o:[['暖色調','warm tones'],['冷色調','cool tones'],['粉彩柔和','soft pastel colors'],['高對比鮮豔','vibrant high-contrast colors'],['黑白','black and white'],['復古褪色','muted vintage palette'],['霓虹','neon colors']]},
-{k:'light',t:'⑥ 光線',m:1,o:[['黃金時刻','golden hour light'],['柔和自然光','soft natural light'],['電影感打光','cinematic lighting'],['逆光剪影','backlit silhouette'],['夜晚月光','moonlight at night'],['霓虹燈光','neon glow'],['攝影棚燈光','studio lighting']]},
-{k:'comp',t:'⑦ 構圖／鏡頭',m:0,o:[['特寫','close-up shot'],['半身','medium shot'],['全景廣角','wide-angle shot'],['俯瞰','top-down aerial view'],['低角度仰拍','low-angle shot'],['淺景深','shallow depth of field'],['對稱構圖','symmetrical composition'],['等距視角','isometric view']]},
-{k:'ratio',t:'⑧ 圖片比例',m:0,o:[['正方形 1:1','square 1:1'],['直式 2:3','portrait 2:3'],['橫式 3:2','landscape 3:2'],['手機桌布 9:16','vertical 9:16'],['寬螢幕 16:9','widescreen 16:9']]}
-];
-var S={style:[],mood:[],color:[],light:[],comp:[],ratio:[]},lang='zh';
 var $=function(i){return document.getElementById(i)};
-var gh='';D.forEach(function(g){gh+='<div class="g"><span class="l">'+g.t+(g.m?' <small>（可複選）</small>':'')+'</span><div class="chips" data-k="'+g.k+'">'+g.o.map(function(o,i){return '<button class="chip" data-i="'+i+'">'+o[0]+'</button>'}).join('')+'</div></div>'});
-$('groups').innerHTML=gh;
-function def(k){return D.filter(function(g){return g.k===k})[0]}
-function sync(){document.querySelectorAll('.chips').forEach(function(c){var k=c.dataset.k;c.querySelectorAll('.chip').forEach(function(b){b.classList.toggle('on',S[k].indexOf(+b.dataset.i)>-1)})})}
-document.addEventListener('click',function(e){var b=e.target.closest('.chip');if(!b)return;var k=b.parentNode.dataset.k,i=+b.dataset.i,g=def(k),p=S[k].indexOf(i);
-if(p>-1)S[k].splice(p,1);else{if(!g.m)S[k]=[];S[k].push(i)}sync();render()});
-function pick(k,l){return S[k].map(function(i){return def(k).o[i][l]})}
-function render(){var v=function(i){return $(i).value.trim()},z=lang==='zh',L=z?0:1,s=v('subj');
-if(!s){$('out').textContent=z?'請先在左側填寫「主體」，指令會即時在這裡產生。':'Fill in the subject on the left and your prompt will appear here.';return}
-var j=z?'、':', ',t=[];
-if(z){t.push('請幫我畫一張圖：'+s+(v('scene')?'，場景是'+v('scene'):'')+'。');
-var a=[];if(S.style.length)a.push('藝術風格：'+pick('style',0));if(S.mood.length)a.push('氛圍：'+pick('mood',0).join(j));if(S.color.length)a.push('色調：'+pick('color',0).join(j));if(S.light.length)a.push('光線：'+pick('light',0));if(S.comp.length)a.push('構圖：'+pick('comp',0));
-if(a.length)t.push(a.join('；')+'。');
-if(v('extra'))t.push('補充細節：'+v('extra')+'。');if(v('neg'))t.push('請避免：'+v('neg')+'。');
-if(S.ratio.length)t.push('圖片比例：'+pick('ratio',0)+'。');t.push('請直接生成圖片，細節豐富、畫面乾淨。')}
-else{t.push('Create an image: '+s+(v('scene')?', set in '+v('scene'):'')+'.');
-var b=[];if(S.style.length)b.push('Style: '+pick('style',1));if(S.mood.length)b.push('Mood: '+pick('mood',1).join(j));if(S.color.length)b.push('Color palette: '+pick('color',1).join(j));if(S.light.length)b.push('Lighting: '+pick('light',1));if(S.comp.length)b.push('Composition: '+pick('comp',1));
-if(b.length)t.push(b.join('. ')+'.');
-if(v('extra'))t.push('Extra details: '+v('extra')+'.');if(v('neg'))t.push('Avoid: '+v('neg')+'.');
-if(S.ratio.length)t.push('Aspect ratio: '+pick('ratio',1)+'.');t.push('Generate the image directly, with rich detail and a clean result.')}
-$('out').textContent=t.join('\n')}
-document.querySelectorAll('textarea,input[type=text]').forEach(function(e){e.addEventListener('input',render)});
-$('lang').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;lang=b.dataset.v;this.querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===b)});render()});
-function note(m){$('msg').textContent=m}
-$('copy').onclick=function(){var t=$('out').textContent;
-function fb(){var r=document.createRange();r.selectNodeContents($('out'));var s=getSelection();s.removeAllRanges();s.addRange(r);try{document.execCommand('copy');note('✅ 已複製！')}catch(x){note('請手動選取文字複製')}}
-try{navigator.clipboard.writeText(t).then(function(){note('✅ 已複製！去貼到 ChatGPT 吧')},fb)}catch(x){fb()}};
-function setAll(o){$('subj').value=o.s||'';$('scene').value=o.c||'';$('extra').value=o.e||'';$('neg').value=o.n||'';
-S={style:o.st||[],mood:o.m||[],color:o.co||[],light:o.l||[],comp:o.cp||[],ratio:o.r||[]};sync();render()}
-$('reset').onclick=function(){setAll({});note('已清除')};
-var P=[
-{t:'🐱 可愛動物',s:'一隻戴著飛行員護目鏡的橘貓，坐在老式飛機駕駛艙裡',c:'黃昏的雲海上方',st:[2],m:[0,1],co:[0],l:[0],cp:[1],r:[0],n:'模糊、多餘肢體'},
-{n:'🌆 賽博城市',s:'雨夜的台北街頭，騎樓下有賣小吃的攤販與穿雨衣的行人',c:'',st:[8],m:[2],co:[6],l:[5],cp:[2],r:[4],e:'招牌上有繁體中文霓虹字'},
-{n:'🏔️ 水墨山水',s:'雲霧繚繞的高山與一葉孤舟，岸邊有小亭',c:'',st:[5],m:[4],co:[5],l:[1],cp:[2],r:[1]},
-{t:'👤 人像攝影',s:'一位在咖啡店窗邊看書的年輕女子',c:'午後的老街咖啡館',st:[0],m:[0,7],co:[0],l:[1],cp:[5,1],r:[1],n:'塑膠感皮膚、多餘手指'},
-{t:'🎓 畢業紀念',s:'穿著畢業袍的同學們在校門口開心拋帽子慶祝',c:'陽光燦爛的校園',st:[1],m:[0,7],co:[0],l:[0],cp:[2],r:[2]},
-{t:'🎤 社團海報',s:'熱音社成員在舞台上演出的活動海報',e:'海報標題寫「熱音社成果發表會」',st:[7],m:[5],co:[3],l:[5],cp:[1],r:[1]},
-{t:'🎮 遊戲角色',s:'一位手持長劍的少年勇者角色設定圖，正面全身',st:[6],m:[5],co:[3],cp:[6],r:[0]},
-{t:'🧑‍🚀 太空探險',s:'少年太空人在陌生星球上發現發光植物',c:'外星球的紫色天空',st:[3],m:[1,2],co:[6],l:[2],cp:[2],r:[4]},
-{t:'🍜 美食插畫',s:'一桌熱騰騰的台灣小吃，有滷肉飯、珍珠奶茶和蚵仔煎',st:[7],m:[0],co:[0],l:[1],cp:[3],r:[0]},
-{t:'🌸 日系校園',s:'放學後在櫻花樹下並肩走路的兩位同學',st:[1],m:[1,0],co:[2],l:[0],cp:[1],r:[4]},
-{t:'🦸 少年英雄',s:'披著自製披風的高中生英雄，站在屋頂守護城市',st:[3],m:[3],co:[3],l:[3],cp:[4],r:[1]},
-{t:'🐉 奇幻小龍',s:'一隻住在圖書館、守護古書的可愛小龍',st:[2],m:[1,2],co:[0],l:[1],cp:[1],r:[0]},
-{t:'📚 讀書加油',s:'深夜書桌前努力讀書的少年，旁邊有熱牛奶和小檯燈',st:[2],m:[0,4],co:[0],l:[1],cp:[1],r:[0]},
-{t:'🏖️ 夏日回憶',s:'夏天和朋友們在海邊騎腳踏車、一起吃西瓜',st:[2],m:[5,7],co:[3],l:[0],cp:[2],r:[2]}];
-var rb='';P.forEach(function(p,i){rb+='<button class="btn" data-p="'+i+'">'+(p.t||p.n)+'</button>'});$('presets').innerHTML=rb;
-$('presets').onclick=function(e){var b=e.target.closest('[data-p]');if(!b)return;var p=P[+b.dataset.p];
-setAll({s:p.s,c:p.c,e:p.e,n:p.t?(p.n||''):'',st:p.st,m:p.m,co:p.co,l:p.l,cp:p.cp,r:p.r});note('已套用範本，可繼續修改')};
-$('rand').onclick=function(){var r=function(a){return Math.floor(Math.random()*a)},
-subs=['一隻抱著月亮睡覺的白狐狸','漂浮在天空的圖書館島嶼','在雨中撐傘的機器人','藏在森林裡的發光小屋','會說話的茶壺與茶杯們的下午茶派對','夜市裡的太空人','一座長滿花的廢棄火車站'];
-var o={s:subs[r(subs.length)],st:[r(12)],m:[r(8)],co:[r(7)],l:[r(7)],cp:[r(8)],r:[r(5)]};setAll(o);note('🎲 隨機靈感已套用')};
-var SJ={'🏫 校園生活':['社團教室裡，同學們一起排練話劇','放學後在操場邊吃冰的三個好朋友','圖書館角落專心讀書的少年，桌上堆滿筆記','校慶園遊會，穿著班服的同學們熱鬧擺攤','下課後在走廊上說笑的同學們'],'🧙 奇幻冒險':['騎著小龍飛越雲端的少年冒險家','魔法學院的學生在練習施放魔法','拿著發光地圖探索神祕森林的少女','守護古老城堡的小騎士與他的狐狸夥伴','在星空下召喚星座精靈的小法師'],'🚀 科幻未來':['在太空站窗邊眺望地球的少年太空人','和小型機器人夥伴一起修理飛行車的少女','2150 年的未來學校，全息投影黑板','在外星球上種植花園的探險隊','穿著機甲戰衣的校園守護者'],'🐾 萌寵動物':['抱著書本的柴犬同學','戴著畢業帽的小企鵝','睡在筆記本上的小貓','撐著樹葉傘的小刺蝟','正在彈吉他的小熊貓'],'⚽ 運動熱血':['籃球場上準備投三分球的少年','在雨中比賽的足球隊員們','清晨河堤上慢跑的高中生','羽球比賽中飛身殺球的瞬間','滑板少年在天橋上做出空中轉體'],'🎨 興趣創作':['在房間裡畫插畫的少女，牆上貼滿作品','車庫裡組樂團練習的高中生','電競比賽中專注的選手們','在舞蹈教室練習街舞的少年少女','烘焙社同學們在做蛋糕']};
-var SC=['教室窗邊，午後陽光灑進來','夏日的海邊與漂亮的雲','櫻花盛開的校園小路','熱鬧的夜市','星空下的山頂露營','漂浮在天空的島嶼','溫馨的少年房間，有書桌與燈','雨後的城市街道與彩虹','奇幻的發光森林','太空站的觀景窗前','復古日式車站月台','巷弄裡的小咖啡館'];
-var curT=Object.keys(SJ)[0];
-function drawSJ(){$('subjTabs').innerHTML=Object.keys(SJ).map(function(k){return '<button data-t="'+k+'"'+(k===curT?' class="on"':'')+'>'+k+'</button>'}).join('');
-$('subjRef').innerHTML=SJ[curT].map(function(s,i){return '<button class="ref" data-f="subj" data-s="'+i+'">'+s+'</button>'}).join('')}
-$('sceneRef').innerHTML=SC.map(function(s,i){return '<button class="ref" data-f="scene" data-s="'+i+'">'+s+'</button>'}).join('');
-drawSJ();
-$('subjTabs').onclick=function(e){var b=e.target.closest('[data-t]');if(!b)return;curT=b.dataset.t;drawSJ()};
-document.addEventListener('click',function(e){var b=e.target.closest('.ref');if(!b)return;var f=b.dataset.f,i=+b.dataset.s;
-$(f).value=f==='subj'?SJ[curT][i]:SC[i];render();note('已帶入，可以再自行修改或搭配下方風格選項')});
-/* ===== 300 快速主題 + 300 青少年靈感類別（各 300 內容） ===== */
-function rnd(a){return Math.floor(Math.random()*a)}
-function sample(n,k){var s=[];while(s.length<k){var x=rnd(n);if(s.indexOf(x)<0)s.push(x)}return s}
-var AC=['一位少年','一位少女','三個好朋友','一對雙胞胎同學','戴眼鏡的書呆子','學生會長','剛轉學來的新同學','一群社團夥伴','班上的搞笑擔當','一位害羞的少年'];
-var PL=['教室','操場','海邊','夜市','公園','屋頂','圖書館','車站','社區巷口','山坡上'];
-var FL=['搞笑','溫馨','熱血','感人','神秘','夢幻','友情','挑戰','節慶','未來感','懷舊','療癒','冒險','安靜','驚喜'];
-var TP=[['🏫','校園日常','準備上台報告|分組做科展|偷偷傳紙條|認真打掃教室|在福利社排隊|趴在桌上午睡|互相借抄筆記|布置教室佈告欄|緊張等待成績|分享營養午餐'],
-['🎒','上學路上','騎單車趕上課|撐傘走在雨中|等公車聊天|一起買早餐|追著遲到的鐘聲跑|在轉角遇見貓咪|分享耳機聽歌|搭捷運看窗外|牽著腳踏車慢慢走|互相拍照留念'],
-['⚽','運動熱血','投出關鍵三分球|衝刺最後一百公尺|接力賽交棒|揮出致勝一擊|練習空翻|為隊友加油|綁緊鞋帶準備比賽|在場邊喝水休息|慶祝拿下冠軍|不放棄地重新站起來'],
-['🎵','音樂舞台','彈著木吉他|敲著爵士鼓|練習合唱|在舞台上跳舞|寫下第一首歌|拉著小提琴|調整麥克風|在街頭表演|看樂譜發呆|戴著耳機沉浸音樂'],
-['🎨','美術創作','畫一幅大型壁畫|捏黏土作品|拍攝底片照片|設計社團海報|在素描本塗鴉|用水彩畫風景|製作手作飾品|剪貼手帳|展示自己的作品|畫分鏡漫畫'],
-['🍰','美食烘焙','揉麵團做麵包|裝飾生日蛋糕|煮一鍋熱湯|包水餃|調製珍珠奶茶|分享便當|烤餅乾|切水果拼盤|開心大吃小吃|擺攤賣自製點心'],
-['🧙','奇幻魔法','練習發光咒語|騎著掃帚飛行|與小龍成為朋友|翻開會說話的魔法書|煉製彩色藥水|探索古老城堡|召喚星星精靈|穿過神秘傳送門|與森林精靈對話|守護魔法水晶'],
-['🚀','科幻未來','駕駛小型飛船|修理機器人|操作全息投影|探索外星森林|穿著太空裝漫步|研究時光機|與外星朋友交流|看著兩個月亮|搭乘空中列車|啟動防護罩'],
-['🐾','動物夥伴','餵流浪貓吃飯|與柴犬賽跑|照顧受傷的小鳥|訓練聰明的鸚鵡|替小狗洗澡|與海豚一起游泳|觀察松鼠|牽著羊駝散步|養了一隻小烏龜|與熊貓玩耍'],
-['🎮','電玩遊戲','打通最後一關|組隊參加比賽|設計自己的遊戲|沉迷掌機|收集稀有道具|挑戰最終首領|玩桌遊|直播遊戲實況|與朋友合作闖關|拿到最高分'],
-['📚','讀書學習','熬夜準備考試|專心自習|教同學解題|整理筆記|背英文單字|寫實驗報告|讀一本冒險小說|為模擬考加油|討論功課|寫下夢想清單'],
-['🎬','影視拍攝','拍攝微電影|扛著攝影機|剪輯影片|寫劇本|扮演主角|站在綠幕前|檢查鏡頭畫面|喊「開麥拉」|拍攝紀錄片|在片場休息'],
-['🌿','自然戶外','搭帳篷露營|爬山看日出|在溪邊玩水|觀察星空|騎單車環島|野餐|撿拾美麗貝殼|划獨木舟|放風箏|守著營火聊天'],
-['🤖','機器人科技','組裝機器人|編寫程式碼|測試無人機|操作3D列印機|設計智慧小發明|調整機械手臂|參加機器人競賽|與AI聊天|修理舊電腦|發明環保裝置'],
-['🕵️','推理冒險','拿放大鏡找線索|破解神祕密碼|追查失蹤的書|調查鬼屋傳說|解開藏寶圖|潛入舊倉庫|分析腳印|守在窗邊觀察|翻閱泛黃日記|拼湊事件真相'],
-['🌸','日系動漫','在櫻花雨中奔跑|看祭典煙火|穿著浴衣散步|在鐵道旁等待|變身成魔法少女|看夕陽|揮手道別|共撐一把傘|對著海許願|寫下告白信'],
-['🎉','節慶活動','逛園遊會|交換聖誕禮物|放天燈許願|參加畢業典禮|裝飾萬聖節南瓜|提著燈籠遊行|發紅包拜年|慶祝同學生日|辦校慶表演|等待跨年倒數'],
-['🏙️','城市生活','看城市夜景|穿梭霓虹街頭|在便利商店買宵夜|搭乘最後一班捷運|在咖啡館寫作業|在街頭拍照|追著公車跑|躲雨|逛書店|俯瞰整座城市'],
-['🔬','科學探索','觀察顯微鏡|做火山爆發實驗|架設天文望遠鏡|種植太空蔬菜|研究小昆蟲|測量風速|製作水火箭|分析星象|調配化學溶液|記錄實驗結果'],
-['💪','勵志夢想','對著夕陽大喊夢想|跌倒後再站起來|一步步爬上階梯|為夢想努力練習|收到錄取通知|互相擊掌鼓勵|在黑板寫下目標|拿起行李出發|仰望星空許願|迎著朝陽奔跑']];
-var TA=TP.map(function(t){return t[2].split('|')});
-function cname(c){var t=TP[Math.floor(c/15)];return t[0]+t[1]+'·'+FL[c%15]}
-function ctext(c,n){var f=c%15;return AC[n%10]+'在'+PL[(Math.floor(n/100)*3+f)%10]+TA[Math.floor(c/15)][Math.floor(n/10)%10]+'，氣氛'+FL[f]}
-var cats=sample(300,10),pk={},cc=cats[0];
-function draw2(){if(!pk[cc])pk[cc]=sample(300,5);
-$('subjTabs').innerHTML=cats.map(function(c){return '<button data-c="'+c+'"'+(c===cc?' class="on"':'')+'>'+cname(c)+'</button>'}).join('')+'<button data-r="1">🔀 換10類</button>';
-$('subjRef').innerHTML=pk[cc].map(function(n){return '<button class="rf" data-n="'+n+'">'+ctext(cc,n)+'</button>'}).join('')+'<button class="btn" id="rr" style="padding:3px 10px;font-size:12.5px">🔄 換5個</button>'}
-$('subjTabs').onclick=function(e){var b=e.target.closest('button');if(!b)return;if(b.dataset.r){cats=sample(300,10);cc=cats[0];pk={}}else cc=+b.dataset.c;draw2()};
-$('subjRef').onclick=function(e){var b=e.target.closest('button');if(!b)return;if(b.id==='rr'){pk[cc]=sample(300,5);draw2();return}
-if(b.dataset.n!==undefined){$('subj').value=ctext(cc,+b.dataset.n);render();note('已帶入，可再自行修改')}};
-draw2();
-var SB=[['🐱','橘貓飛行員','一隻戴著飛行員護目鏡的橘貓坐在飛機駕駛艙'],['🐶','柴犬同學','一隻背著書包走進教室的柴犬'],['🐧','畢業企鵝','戴著畢業帽的小企鵝'],['🦊','月亮狐狸','一隻抱著月亮睡覺的白狐狸'],['🐼','熊貓樂手','一隻彈著吉他的小熊貓'],['🐉','圖書館小龍','住在圖書館裡守護古書的小龍'],['🧙','魔法學徒','在魔法學院練習咒語的學生'],['🤖','機器人夥伴','陪少年修理單車的小機器人'],['🚀','少年太空人','在太空站窗邊看地球的少年太空人'],['🦸','少年英雄','披著自製披風站在屋頂的高中生'],['🏀','籃球少年','準備投三分球的籃球少年'],['⚽','足球隊員','在雨中奔跑的足球隊員'],['🛹','滑板少年','在天橋上做空中轉體的滑板少年'],['🎸','車庫樂團','在車庫裡排練的高中樂團'],['💃','街舞社','在教室練習街舞的社團成員'],['🎨','插畫少女','在房間裡畫插畫的少女'],['📚','夜讀少年','深夜在檯燈下讀書的少年'],['🍰','烘焙社','在廚房裡做蛋糕的烘焙社同學'],['🍜','台灣小吃','一桌熱騰騰的台灣小吃'],['🎮','電競選手','專注比賽的電競選手們'],['🌸','櫻花同學','在櫻花樹下並肩走路的兩位同學'],['🚲','單車夥伴','一群騎單車環島的好朋友'],['⛺','星空露營','在星空下露營的朋友們'],['🏖️','海邊夏日','在海邊吃西瓜的朋友們'],['🎭','話劇社','在舞台上演出的話劇社'],['📷','攝影少女','拿著底片相機拍街景的少女'],['🔬','科展小組','在實驗室做科展的學生們'],['🕵️','推理少年','拿著放大鏡調查校園謎團的少年'],['🏰','小騎士','與狐狸夥伴守護城堡的小騎士'],['🌈','追彩虹','雨後在街上追彩虹的孩子們']];
-var BU=[['日系動畫',1,[0,1],[2],[0],[1],4],['吉卜力水彩',2,[8,4],[0],[1],[2],2],['3D 皮克斯',3,[9],[3],[6],[1],0],['寫實攝影',0,[0],[0],[2],[5],1],['像素藝術',6,[10],[3],[6],[6],0],['扁平插畫',7,[5,8],[2],[1],[3],0],['賽博龐克',8,[12],[6],[5],[2],4],['水墨國畫',5,[4],[5],[1],[2],1],['黏土動畫',10,[10,0],[0],[6],[1],0],['油畫',4,[11],[5],[0],[2],2]];
-var th=sample(300,10);
-function drawTh(){$('presets').innerHTML=th.map(function(i){var s=SB[i%30],b=BU[Math.floor(i/30)];return '<button class="btn" data-p="'+i+'">'+s[0]+s[1]+'·'+b[0]+'</button>'}).join('')+'<button class="btn" data-r="1">🔀 換一批</button>'}
-$('presets').onclick=function(e){var x=e.target.closest('button');if(!x)return;if(x.dataset.r){th=sample(300,10);drawTh();return}
-var i=+x.dataset.p,s=SB[i%30],b=BU[Math.floor(i/30)];setAll({s:s[2],c:SC[(i*7)%12],st:[b[1]],m:b[2],co:b[3],l:b[4],cp:b[5],r:[b[6]]});note('已套用主題，可繼續修改')};
-/* ===== 300 藝術風格 + 300 場景靈感 ===== */
-var MD=[['油畫','oil painting'],['水彩','watercolor painting'],['水墨','Chinese ink wash painting'],['鉛筆素描','pencil sketch'],['粉彩畫','pastel drawing'],['版畫','woodblock print'],['壓克力畫','acrylic painting'],['蜡筆畫','crayon drawing'],['彩色鉛筆畫','colored pencil drawing'],['數位插畫','digital illustration'],['像素畫','pixel art'],['低多邊形','low poly 3D art'],['黏土動畫','claymation'],['紙雕','paper cut art'],['刺繡','embroidery art'],['彩繪玻璃','stained glass art'],['馬賽克','mosaic art'],['剪影畫','silhouette art'],['3D 渲染','3D render'],['漫畫','comic book art'],['日系動畫','anime style'],['浮世繪','ukiyo-e print'],['噴漆塗鴉','graffiti spray paint art'],['海報設計','poster design'],['卡通','cartoon style'],['攝影','photography'],['針織毛線','knitted yarn art'],['樂高積木','LEGO brick style'],['摘紙','origami paper art'],['向量插畫','vector illustration']];
-var TR=[['柔和粉彩','soft pastel'],['復古懷舊','vintage retro'],['夢幻童話','dreamy fairytale'],['極簡','minimalist'],['魔幻奇幻','fantasy'],['暗黑氛圍','dark moody'],['霓虹未來','neon futuristic'],['可愛萌系','kawaii cute'],['華麗細膩','ornate highly detailed'],['日系清新','fresh Japanese']];
-var st0=D[0].o.length;
-for(var q=0;q<300;q++)D[0].o.push([TR[Math.floor(q/30)][0]+MD[q%30][0],TR[Math.floor(q/30)][1]+' '+MD[q%30][1]]);
-var stEl=document.querySelector('.chips[data-k="style"]'),stShow=sample(300,10).map(function(x){return x+st0});
-function drawSt(){var L=S.style.filter(function(i){return stShow.indexOf(i)<0}).concat(stShow);
-stEl.innerHTML=L.map(function(i){return '<button class="chip" data-i="'+i+'">'+D[0].o[i][0]+'</button>'}).join('')+'<button class="rf" data-sr="1">🔀 換10種（共300種）</button>'}
-var _sy=sync;sync=function(){drawSt();_sy()};
-stEl.addEventListener('click',function(e){if(e.target.closest('[data-sr]')){stShow=sample(300,10).map(function(x){return x+st0});sync()}});
-sync();
-var PLc=['教室窗邊','校園操場','學校圖書館','屋頂天台','海邊沙灘','熱鬧夜市','老街巷弄','捷運月台','公園長椅','山頂步道','森林小徑','安靜湖畔','稻田小路','街角咖啡館','舊書店','遊樂園','溫泉小鎮','鄉間火車站','城市天橋','河堤自行車道','太空站','海底世界','雲端天空島','魔法森林','古老城堡','未來都市','沙漠綠洲','雪山小屋','花海','海邊燈塔'];
-var PF=['黃昏的','清晨薄霧中的','下著雨的','星空下的','飄著雪的','櫻花紛飛的','陽光燦爛的','霓虹閃爍的','夢幻彩霞中的','微風吹拂的'];
-var scN=sample(300,10);
-function scT(i){return PF[Math.floor(i/30)]+PLc[i%30]}
-function drawSc(){$('sceneRef').innerHTML=scN.map(function(i){return '<button class="rf" data-i="'+i+'">'+scT(i)+'</button>'}).join('')+'<button class="btn" data-sr="1" style="padding:3px 10px;font-size:12.5px">🔄 換10個</button>'}
-$('sceneRef').onclick=function(e){var b=e.target.closest('button');if(!b)return;if(b.dataset.sr){scN=sample(300,10);drawSc();return}$('scene').value=scT(+b.dataset.i);render();note('已帶入場景，可再自行修改')};
-drawSc();
-document.querySelectorAll('.rl')[2].textContent='💡 場景靈感（共 300 個，每次開啟隨機顯示 10 個）';
-drawTh();
-document.querySelector('.rl').textContent='✨ 快速主題（共 300 個，每次開啟隨機顯示 10 個）';
-render();
+// [id,icon,中,英,[[key,標籤,提示,chips[[zh,en]]]...],中文模板,英文模板]
+var OPS=[
+['bg','🌄','換背景','Change background',[['a','新背景','例如：海邊日落',[['海邊日落','a sunset beach'],['純白攝影棚背景','a pure white studio background'],['森林','a forest'],['城市夜景','a city night view'],['教室','a classroom'],['太空','outer space'],['櫻花樹下','under cherry blossom trees']]]],'把背景換成「{a}」，主體邊緣自然乾淨，光線與新背景一致。','Replace the background with {a}; keep the subject edges clean and match the lighting to the new background.'],
+['rm','🧹','移除物件／人物','Remove objects',[['a','要移除的內容','例如：背景路人、電線、浮水印',[['背景路人','background passers-by'],['電線','power lines'],['垃圾與雜物','trash and clutter'],['浮水印','the watermark']]]],'移除「{a}」，並用自然的背景內容補齊，不留痕跡。','Remove {a} and fill the area naturally with matching background, leaving no trace.'],
+['add','➕','新增物件','Add objects',[['a','要新增的內容','例如：一隻戴帽子的小狗'],['b','位置','例如：右下角的長椅旁']],'在{b:畫面中適當的位置}加入{a}，大小、透視與光影要與原圖協調。','Add {a} at {b:a suitable spot in the scene}; match size, perspective and lighting to the original.'],
+['st','🎨','換藝術風格','Change art style',[['a','目標風格','例如：吉卜力水彩',[['吉卜力水彩','Ghibli-inspired watercolor'],['日系動畫','Japanese anime style'],['3D 皮克斯','Pixar-style 3D'],['油畫','oil painting'],['水墨國畫','Chinese ink wash painting'],['像素畫','pixel art'],['黏土動畫','claymation'],['賽博龐克','cyberpunk']]]],'把整張圖轉換成「{a}」風格，保留原本的人物與構圖。','Convert the whole image to {a} style while keeping the original characters and composition.'],
+['co','🌈','調整色調／光線','Color and lighting',[['a','目標色調','例如：電影感調色',[['溫暖黃金時刻','warm golden hour tones'],['冷色調','cool tones'],['黑白','black and white'],['復古底片','a vintage film look'],['提亮清透','brighter and clearer'],['電影感調色','cinematic color grading'],['霓虹夜景','neon night lighting']]]],'調整整體色調與光線為「{a}」，保持自然，不要過曝或失真。','Adjust the overall color and lighting to {a}; keep it natural, with no overexposure or distortion.'],
+['pt','🧑','人像修飾','Portrait retouching',[['a','修飾項目','例如：自然美肌去瑕疵',[['自然美肌去瑕疵','natural skin retouching and blemish removal'],['換髮色','change the hair color'],['換髮型','change the hairstyle'],['換服裝','change the outfit'],['自然微笑表情','a natural smile'],['加上眼鏡','add glasses']]],['b','細節說明','例如：改成栗棕色短髮']],'人像調整：{a}；{b:細節維持自然}。保持本人五官特徵與辨識度，不要過度修圖。','Portrait edit: {a}; {b:keep details natural}. Preserve the person’s facial identity and do not over-retouch.'],
+['rt','🛠️','修復／提升畫質','Restore and enhance',[['a','處理項目','例如：老照片修復並上色',[['老照片修復並上色','restore the old photo and colorize it'],['去除雜訊與模糊','remove noise and blur'],['修補破損與折痕','repair scratches and creases'],['提升解析度與銳利度','enhance resolution and sharpness']]]],'畫質處理：{a}。盡量還原真實細節，不要改變人物長相。','Quality work: {a}. Recover true details and do not change anyone’s appearance.'],
+['op','📐','擴圖（向外延伸）','Extend the canvas',[['a','目標比例','例如：16:9',[['16:9','16:9'],['9:16','9:16'],['1:1','1:1'],['3:2','3:2'],['2:3','2:3']]],['b','延伸內容','例如：左右延伸成更寬的海灘']],'擴圖：把畫面延伸成 {a} 比例，{b:自然延伸背景內容}，與原圖無縫銜接。','Extend the canvas to a {a} aspect ratio, {b:naturally continuing the background}, blending seamlessly with the original.'],
+['tx','🔤','加入文字','Add text',[['a','文字內容','例如：夏日回憶'],['b','位置與樣式','例如：置中上方、白色粗體、帶陰影']],'在圖上加入文字「{a}」，位置與樣式：{b:置於下方、清晰易讀}。文字請完全照抄，不要出現錯字。','Add the text “{a}” to the image. Position and style: {b:at the bottom, clear and readable}. Copy the text exactly with no typos.'],
+['lc','🎯','局部修改','Local edit',[['a','要改的區域','例如：左邊那位同學的帽子'],['b','改成什麼','例如：紅色棒球帽']],'局部修改：把{a}改成{b}，其餘部分保持不變。','Local edit: change {a} into {b} and leave everything else unchanged.'],
+['cu','✂️','去背／商品圖','Cutout and product shot',[['a','輸出形式','例如：純白背景商品圖',[['透明背景','a transparent background'],['純白背景商品圖','a pure white background product photo'],['證件照白底','a white-background ID photo'],['灰色漸層攝影棚','a gray gradient studio background']]]],'主體去背並輸出為「{a}」，邊緣乾淨，保留髮絲與陰影等細節。','Cut out the subject and output it on {a}; keep clean edges and details such as hair strands and shadows.']
+];
+var KP=[['人物臉部與五官','facial features'],['整體構圖','overall composition'],['背景','background'],['原有色彩','original colors'],['圖中文字','existing text'],['人物姿勢','pose'],['圖片比例','aspect ratio'],['服裝','clothing']];
+var PR=[
+['🪪 證件照白底',{cu:{a:'證件照白底'},pt:{a:'自然美肌去瑕疵'}},[0,5],30],
+['📷 老照片修復上色',{rt:{a:'老照片修復並上色'}},[0,1,5],50],
+['🛍️ 商品白底主圖',{cu:{a:'純白背景商品圖'},co:{a:'提亮清透'}},[1,6],40],
+['🌅 換海邊日落背景',{bg:{a:'海邊日落'},co:{a:'溫暖黃金時刻'}},[0,5,7],60],
+['🧹 移除路人雜物',{rm:{a:'背景路人'}},[0,1,3],30],
+['🎨 變吉卜力水彩',{st:{a:'吉卜力水彩'}},[0,1,5],80],
+['📐 擴圖成 16:9',{op:{a:'16:9',b:'左右自然延伸背景'}},[0,1,3],50],
+['🔤 加標題文字',{tx:{a:'夏日回憶',b:'置中上方、白色粗體、帶陰影'}},[1,3],40],
+['🎬 電影感調色',{co:{a:'電影感調色'}},[0,1,2],50],
+['🧒 頭貼卡通化',{st:{a:'3D 皮克斯'}},[0],70]
+];
+var act={},val={},keep=[],lang='zh',EN={};
+OPS.forEach(function(o){o[4].forEach(function(f){(f[3]||[]).forEach(function(c){EN[c[0]]=c[1]})})});
+$('ops').innerHTML=OPS.map(function(o){return '<div class="op" id="op_'+o[0]+'"><button class="oh" data-o="'+o[0]+'"><span>'+o[1]+' '+o[2]+'</span><span>＋</span></button><div class="ob">'+o[4].map(function(f){return '<div class="fl">'+f[1]+'</div><input type="text" id="i_'+o[0]+f[0]+'" data-o="'+o[0]+'" data-k="'+f[0]+'" placeholder="'+f[2]+'">'+(f[3]?'<div class="chips">'+f[3].map(function(c){return '<button class="chip" data-o="'+o[0]+'" data-k="'+f[0]+'" data-v="'+c[0]+'">'+c[0]+'</button>'}).join('')+'</div>':'')}).join('')+'</div></div>'}).join('');
+$('kp').innerHTML=KP.map(function(k,i){return '<button class="chip" data-i="'+i+'">'+k[0]+'</button>'}).join('');
+$('pre').innerHTML=PR.map(function(p,i){return '<button class="btn" data-p="'+i+'">'+p[0]+'</button>'}).join('');
+function ui(){OPS.forEach(function(o){$('op_'+o[0]).classList.toggle('on',!!act[o[0]])});
+document.querySelectorAll('#ops .chip').forEach(function(c){c.classList.toggle('on',(val[c.dataset.o+c.dataset.k]||'')===c.dataset.v)});
+document.querySelectorAll('#kp .chip').forEach(function(c){c.classList.toggle('on',keep.indexOf(+c.dataset.i)>-1)});gen()}
+document.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
+if(b.classList.contains('oh')){var id=b.dataset.o;act[id]=!act[id];ui();return}
+if(b.dataset.v!==undefined&&b.dataset.o){var k=b.dataset.o+b.dataset.k;val[k]=val[k]===b.dataset.v?'':b.dataset.v;$('i_'+k).value=val[k];act[b.dataset.o]=true;ui();return}
+if(b.dataset.i!==undefined&&b.parentNode.id==='kp'){var i=+b.dataset.i,p=keep.indexOf(i);if(p>-1)keep.splice(p,1);else keep.push(i);ui();return}
+if(b.dataset.p!==undefined){var pr=PR[+b.dataset.p];reset(true);Object.keys(pr[1]).forEach(function(id){act[id]=true;Object.keys(pr[1][id]).forEach(function(k){val[id+k]=pr[1][id][k];$('i_'+id+k).value=pr[1][id][k]})});keep=pr[2].slice();$('sl').value=pr[3];ui();$('ms').textContent='已套用範本，可再增減項目或修改文字。'}});
+document.addEventListener('input',function(e){var t=e.target;if(t.dataset&&t.dataset.o&&t.dataset.k){val[t.dataset.o+t.dataset.k]=t.value;if(t.value.trim())act[t.dataset.o]=true;ui()}else if(t.id==='sl'||t.id==='ex'||t.id==='ng')gen()});
+$('lg').onclick=function(e){var b=e.target.closest('button');if(!b)return;lang=b.dataset.v;this.querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===b)});gen()};
+function reset(keepUi){act={};val={};keep=[];document.querySelectorAll('#ops input').forEach(function(i){i.value=''});if(!keepUi){$('ex').value='';$('ng').value='';$('sl').value=50;ui()}}
+$('rs').onclick=function(){reset();$('ms').textContent='已清除。'};
+var url=0;$('fi').onchange=function(){var f=this.files[0],p=$('pv');if(url)URL.revokeObjectURL(url);if(f){url=URL.createObjectURL(f);p.src=url;p.style.display='block'}else{url=0;p.style.display='none'}};
+function fill(t,id,z){return t.replace(/\{(\w)(?::([^}]*))?\}/g,function(m,k,d){var x=(val[id+k]||'').trim();if(!x)return d||'';return z?x:(EN[x]||x)})}
+function gen(){var z=lang==='zh',L=[],w=[],s=+$('sl').value;$('sv').textContent=s;
+OPS.forEach(function(o){if(!act[o[0]])return;if(!(val[o[0]+'a']||'').trim()){w.push(z?o[2]:o[3]);return}L.push(fill(o[z?5:6],o[0],z))});
+if(!L.length){$('out').textContent=z?'請先在左側點開至少一項修改並填寫內容，指令會即時顯示在這裡。'+(w.length?'\n\n⚠ 尚未填寫：'+w.join('、'):''):'Open at least one edit on the left and fill it in.'+(w.length?'\n\nStill empty: '+w.join(', '):'');return}
+var t=[z?'請以我上傳的這張圖片為基礎進行編輯，不要重新創作一張全新的圖：':'Edit the image I uploaded, using it as the base. Do not create a brand-new image:'];
+L.forEach(function(x,i){t.push((i+1)+'. '+x)});
+if(keep.length)t.push(z?'請務必保持不變：'+keep.map(function(i){return KP[i][0]}).join('、')+'。':'Keep unchanged: '+keep.map(function(i){return KP[i][1]}).join(', ')+'.');
+var d=s<35?(z?'輕微微調':'subtle tweaks'):s<70?(z?'中等幅度':'moderate'):(z?'大幅改造':'major transformation');
+t.push(z?'修改幅度：'+d+'。':'Edit strength: '+d+'.');
+if($('ex').value.trim())t.push((z?'補充要求：':'Extra requirements: ')+$('ex').value.trim()+(z?'。':'.'));
+if($('ng').value.trim())t.push((z?'請避免：':'Avoid: ')+$('ng').value.trim()+(z?'。':'.'));
+t.push(z?'請直接輸出編輯後的圖片，並保持原圖的畫質與清晰度。':'Output the edited image directly and keep the original quality and sharpness.');
+$('out').textContent=t.join('\n')+(w.length?'\n\n⚠ 以下項目尚未填寫，已略過：'+w.join(z?'、':', '):'')}
+$('cp').onclick=function(){var t=$('out').textContent,m=$('ms');function ok(){m.textContent='✅ 已複製！記得在 ChatGPT 先附上原圖再貼上。'}
+function fb(){var r=document.createRange();r.selectNodeContents($('out'));var q=getSelection();q.removeAllRanges();q.addRange(r);try{document.execCommand('copy');ok()}catch(x){m.textContent='請手動選取文字複製'}}
+try{navigator.clipboard.writeText(t).then(ok,fb)}catch(x){fb()}};
+ui();
 </script>
 </body>
 </html>
