@@ -93,7 +93,7 @@ textarea,input[type=text]{width:100%;border:1px solid var(--bd);background:var(-
 <div class="grid">
 <div>
 <div class="g"><span class="l">學習風格圖的哪些特徵 <small>（可複選）</small></span><div class="chips" id="fAs"></div></div>
-<div class="g"><span class="l">風格化強度 <small id="fSv">60</small></span><div class="frow"><small>輕微</small><input type="range" id="fS" min="10" max="100" value="60"><small>強烈</small></div></div>
+<div class="g"><span class="l">風格化強度 <small id="fSv">60</small></span><div class="frow"><small>輕微</small><input type="range" id="fS" min="10" max="200" value="60"><small>極致</small></div></div>
 <div class="g" id="fBw" style="display:none"><span class="l">風格 A 比例 <small id="fRv">50% A ／ 50% B</small></span><div class="frow"><small>偏 B</small><input type="range" id="fRt" min="10" max="90" value="50"><small>偏 A</small></div></div>
 <div class="g"><label for="fR2">圖片比例</label><select id="fR2" style="width:100%;padding:8px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font:inherit"><option value="">不指定（跡隨主圖）</option><option>1:1</option><option>2:3</option><option>3:2</option><option>9:16</option><option>16:9</option></select></div>
 <div class="g"><label for="fX">補充要求 <small>（選填）</small></label><input type="text" id="fX" placeholder="例如：人物表情保持不變、背景更夢幻"></div>
@@ -116,15 +116,15 @@ F('fAs').onclick=function(e){var b=e.target.closest('.fc');if(!b)return;var i=+b
 ['fAn','fBn','fX','fN','fS','fRt','fR2'].forEach(function(id){F(id).addEventListener('input',gen);F(id).addEventListener('change',gen)});
 F('fL').onclick=function(e){var b=e.target.closest('button');if(!b)return;fl=b.dataset.v;this.querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===b)});gen()};
 function gen(){var v=function(i){return F(i).value.trim()},z=fl==='zh',hM=!!urls.fM,hA=!!urls.fA,hB=!!urls.fB,s=+F('fS').value,r=+F('fRt').value;
-F('fBw').style.display=hB?'block':'none';F('fSv').textContent=s;F('fRv').textContent=r+'% A ／ '+(100-r)+'% B';
+F('fBw').style.display=hB?'block':'none';F('fSv').textContent=s+(s>100?'（強化區 +'+(s-100)+'）':'');F('fRv').textContent=r+'% A ／ '+(100-r)+'% B';
 if(!hM||!hA){F('fO').textContent=z?'請先上傳「主圖」與「風格圖 A」，指令會在這裡產生（風格圖 B 可不填）。':'Upload the main image and style image A to generate the prompt (style image B is optional).';return}
 var as=on.map(function(i){return AS[i][z?0:1]}).join(z?'、':', ')||(z?'整體視覺風格':'overall visual style'),nA=v('fAn'),nB=v('fBn'),t=[],
-w=s<35?(z?'輕微':'subtle'):s<70?(z?'中等':'moderate'):(z?'強烈':'strong');
+w=s<35?(z?'輕微':'subtle'):s<70?(z?'中等':'moderate'):s<=100?(z?'強烈':'strong'):s<=150?(z?'極強，超越一般強度':'very strong, beyond the normal level'):(z?'極致強化，風格特徵要非常誇張、鮮明，幾乎完全風格化':'maximum, extremely exaggerated and vivid, almost fully stylized');
 if(z){t.push('請根據我依序上傳的 '+(hB?3:2)+' 張圖片，生成一張全新的融合圖片：');
 t.push('1. 第 1 張【主圖】：保留主要主體、人物／物件與基本構圖。');
 t.push('2. 第 2 張【風格圖 A】'+(nA?'（'+nA+'）':'')+'：學習它的'+as+'。');
 if(hB){t.push('3. 第 3 張【風格圖 B】'+(nB?'（'+nB+'）':'')+'：同樣學習它的'+as+'。');t.push('融合比例：風格 A 約 '+r+'%、風格 B 約 '+(100-r)+'%，自然混合成一種和諧的新風格，不要只是拼貼或左右並排。')}
-t.push('整體風格化程度：'+w+'。');
+t.push('整體風格化程度：'+w+'（'+s+'%）。');
 if(v('fX'))t.push('補充要求：'+v('fX')+'。');if(v('fN'))t.push('請避免：'+v('fN')+'。');
 if(F('fR2').value)t.push('圖片比例：'+F('fR2').value+'。');
 t.push('請直接生成圖片，不要直接複製原圖，也不要加入浮水印。')}
@@ -132,7 +132,7 @@ else{t.push('Using the '+(hB?3:2)+' images I upload in order, create one brand-n
 t.push('1. Image 1 is the MAIN image: keep its main subject, characters/objects and basic composition.');
 t.push('2. Image 2 is STYLE image A'+(nA?' ('+nA+')':'')+': learn its '+as+'.');
 if(hB){t.push('3. Image 3 is STYLE image B'+(nB?' ('+nB+')':'')+': also learn its '+as+'.');t.push('Blend ratio: about '+r+'% style A and '+(100-r)+'% style B, merged naturally into one harmonious new style, not a collage or side-by-side layout.')}
-t.push('Overall stylization strength: '+w+'.');
+t.push('Overall stylization strength: '+w+' ('+s+'%).');
 if(v('fX'))t.push('Extra requirements: '+v('fX')+'.');if(v('fN'))t.push('Avoid: '+v('fN')+'.');
 if(F('fR2').value)t.push('Aspect ratio: '+F('fR2').value+'.');
 t.push('Generate the image directly; do not simply copy the original images and add no watermark.')}
