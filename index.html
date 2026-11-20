@@ -59,7 +59,7 @@ textarea,input[type=text]{width:100%;border:1px solid var(--bd);background:var(-
 </style><div class="pane">
 <div class="wrap">
 <h1>🎨 ChatGPT 繪圖指令產生器</h1>
-<p class="sub">選一選、填一填，自動組合出可直接貼進 ChatGPT 的畫圖提示詞。</p>
+<p class="sub">選一選、填一填，自動組合出可直接貼進 ChatGPT,Gemini 的畫圖提示詞。</p>
 <div class="rl" style="margin:0 0 6px">✨ 快速主題（點一下套用整組設定）</div>
 <div class="row" id="presets"></div>
 <div class="grid">
@@ -269,7 +269,7 @@ label.ck{display:inline-flex;gap:6px;align-items:center;font-size:13.5px;margin-
 </style><div class="pane">
 <div class="wrap">
 <h1>🎬 ChatGPT 設計動畫指令產生器</h1>
-<p class="sub">選擇想請 ChatGPT 做什麼（分鏡、影片提示詞、序列幀圖、程式動畫、角色設定），自動組合出可直接貼上的指令。</p>
+<p class="sub">選擇想請 ChatGPT,Gemini 做什麼（分鏡、影片提示詞、序列幀圖、程式動畫、角色設定），自動組合出可直接貼上的指令。</p>
 <div class="card"><span class="l">✨ 快速範本 <small>（點一下套用）</small></span><div class="row" id="pre"></div></div>
 <div class="grid">
 <div>
@@ -578,7 +578,7 @@ ui();
 
 (function(){
 var F=function(i){return document.getElementById(i)},fl='zh',urls={};
-var AS=[['色彩配色','color palette'],['筆觸與線條','brushwork and line quality'],['材質與質感','texture and material feel'],['光影與氛圍','lighting and atmosphere'],['構圖與鏡頭','composition and camera angle']],on=[0,1,3];
+var AS=[['色彩配色','color palette'],['筆觸與線條','brushwork and line quality'],['材質與質感','texture and material feel'],['光影與氛圍','lighting and atmosphere'],['構圖與鏡頭','composition and camera angle'],['人物比例與造型','character proportions and design'],['背景處理方式','background treatment'],['陰影與高光','shadows and highlights'],['色彩飽和度與對比','color saturation and contrast'],['細節繁簡程度','level of detail'],['畫面氛圍與情緒','mood and emotional tone'],['顆粒與噪點質感','grain and noise texture'],['邊緣與輪廓處理','edge and outline treatment'],['裝飾元素與圖案','decorative elements and patterns'],['空間景深與透視','depth and perspective']],on=[0,1,3];
 F('fAs').innerHTML=AS.map(function(a,i){return '<button class="fc'+(on.indexOf(i)>-1?' on':'')+'" data-i="'+i+'">'+a[0]+'</button>'}).join('');
 F('fAs').onclick=function(e){var b=e.target.closest('.fc');if(!b)return;var i=+b.dataset.i,p=on.indexOf(i);if(p>-1)on.splice(p,1);else on.push(i);b.classList.toggle('on');gen()};
 ['fM','fA','fB'].forEach(function(id){F(id).onchange=function(){var f=this.files[0],im=F(id+'p');if(urls[id])URL.revokeObjectURL(urls[id]);if(f){urls[id]=URL.createObjectURL(f);im.src=urls[id];im.style.display='block'}else{urls[id]=0;im.style.display='none'}gen()}});
