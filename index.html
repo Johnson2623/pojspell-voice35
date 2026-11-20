@@ -16,6 +16,12 @@ body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.6 system-ui,-appl
 @media(max-width:640px){.tabs{grid-template-columns:repeat(2,1fr)}}
 .host{display:none}.host.on{display:block}
 </style>
+<style>
+:root:root:root{--bg:#161615;--card:#222220;--tx:#eeede8;--mu:#9a9a95;--bd:#34332f;--ac:#ff7a45;--acx:#fff;color-scheme:dark}
+.tabs{max-width:1100px;padding:16px 12px 0;gap:10px}
+.tabs button{border-radius:14px;padding:18px 8px;font-size:16px;background:var(--card);border-color:var(--bd)}
+.tabs button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+</style>
 </head>
 <body>
 <div class="tabs" id="tabs"><button data-t="draw">🎨 繪圖指令產生器</button><button data-t="edit">🖌️ 修改圖檔指令產生器</button><button data-t="fusion">🧬 風格融合模式</button><button data-t="anim">🎬 動畫指令產生器</button></div>
@@ -734,5 +740,79 @@ drawTp();drawT();
 ui();
 
 })(window.__mk("anim"));</script>
+<script>
+(function(){
+var CSS=':host{--bg:#151514;--card:#1f1f1d;--tx:#eeede8;--mu:#9a9a95;--bd:#34332f;--ac:#ff7a45;--acx:#fff;--chip:#242422}'
++'.wrap{display:none}.x-shell{max-width:1100px;margin:0 auto;padding:14px 12px 40px}'
++'.x-bar{height:10px;border-radius:999px;background:#2b2b29;margin:0 0 18px;overflow:hidden}.x-bar i{display:block;height:100%;width:0;background:var(--ac);border-radius:999px;transition:width .25s}'
++'.x-lay{display:grid;grid-template-columns:250px 1fr;gap:18px;align-items:start}.x-steps{display:flex;flex-direction:column;gap:8px}'
++'.x-st{text-align:left;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:14px;padding:14px 16px;font:inherit;font-weight:600;cursor:pointer}'
++'.x-st.on{border-color:var(--ac);background:rgba(255,122,69,.16)}'
++'.x-panel{background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:22px;min-width:0}'
++'.x-pt{font-size:22px;margin:0 0 4px}.x-ps{margin:0 0 18px;color:var(--mu);font-size:14px}'
++'.solo>.g>.l:first-child{display:none}.x-body{display:none}.x-body.on{display:block}'
++'.x-panel .card{background:none;border:0;padding:0;margin:0 0 6px}.x-panel .side{position:static}'
++'.x-panel textarea,.x-panel input[type=text],.x-panel select{background:var(--bg);border-radius:14px;padding:13px 15px}'
++'.x-panel .chip,.x-panel .fc,.x-panel .btn{padding-top:6px;padding-bottom:6px}'
++'.x-pv{margin-top:18px;padding:10px 14px;border:1px dashed var(--bd);border-radius:14px;color:var(--mu);font-size:13px;cursor:pointer;white-space:pre-wrap;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}'
++'.x-pv.off{display:none}.x-nav{display:flex;justify-content:space-between;margin-top:18px}'
++'.x-btn{border:1px solid var(--bd);background:var(--bg);color:var(--tx);border-radius:12px;padding:10px 20px;font:inherit;font-weight:600;cursor:pointer}.x-btn.nx{background:var(--ac);border-color:var(--ac);color:#fff}.x-btn[disabled]{opacity:.35;cursor:default}'
++'@media(max-width:760px){.x-lay{grid-template-columns:1fr}.x-steps{flex-direction:row;overflow-x:auto;padding-bottom:4px}.x-st{white-space:nowrap}}';
+function G(r,i){return r.getElementById(i).closest('.g')}
+function C(r,i){return r.getElementById(i).closest('.card')}
+function Q(r,s){return r.querySelector(s)}
+function GP(r,i){if(!r._gs)r._gs=[].slice.call(r.getElementById('groups').children);return r._gs[i]}
+var SPEC={
+draw:{out:'out',steps:[
+['快速主題','點一下套用整組設定，再依喜好微調',function(r){return [Q(r,'.rl'),r.getElementById('presets')]}],
+['主體與場景','先把畫面內容說清楚，越具體越好',function(r){return [G(r,'subj'),G(r,'scene')]}],
+['藝術風格','選一種想要的畫風',function(r){return [GP(r,0)]}],
+['氛圍情緒','可複選，決定畫面的感覺',function(r){return [GP(r,1)]}],
+['色調','可複選',function(r){return [GP(r,2)]}],
+['光線','可複選',function(r){return [GP(r,3)]}],
+['構圖／鏡頭','決定視角與景別',function(r){return [GP(r,4)]}],
+['圖片比例','選擇輸出尺寸',function(r){return [GP(r,5)]}],
+['補充與避免','加入特別要求，並排除不想要的內容',function(r){return [G(r,'extra'),G(r,'neg')]}],
+['輸出指令','複製後貼進 ChatGPT 或 Gemini',function(r){return [Q(r,'.side')]}]]},
+edit:{out:'out',steps:[
+['上傳原圖','選擇要修改的圖片（只在瀏覽器預覽）',function(r){return [C(r,'fi')]}],
+['快速主題','點一下套用，再依需求調整',function(r){return [C(r,'pre')]}],
+['選擇修改','可同時選多項，點標題展開',function(r){return [C(r,'ops')]}],
+['保持不變與幅度','設定要保留的內容與修改強度',function(r){return [C(r,'kp')]}],
+['輸出指令','複製後貼進 ChatGPT 並附上原圖',function(r){return [Q(r,'.side')]}]]},
+fusion:{out:'fO',steps:[
+['上傳圖片','主圖＋1～2 張風格圖（只在瀏覽器預覽）',function(r){return [Q(r,'.fgrid')]}],
+['風格特徵與強度','選擇要學習的特徵與風格化強度',function(r){return [G(r,'fAs'),G(r,'fS'),r.getElementById('fBw')]}],
+['輸出設定','比例、補充要求與避免項目',function(r){return [G(r,'fR2'),G(r,'fX'),G(r,'fN')]}],
+['輸出指令','依序上傳圖片後貼上指令',function(r){return [r.getElementById('fL').parentNode]}]]},
+anim:{out:'out',steps:[
+['快速範本','點一下套用整組設定',function(r){return [C(r,'pre')]}],
+['主題與產出','決定動畫內容與要 ChatGPT／Gemini 產出什麼',function(r){return [C(r,'tp')]}],
+['風格・比例・長度','畫風、比例、時長與幀率',function(r){return [C(r,'g_style')]}],
+['鏡頭・節奏・氛圍','運鏡、動作節奏與整體氛圍',function(r){return [C(r,'g_cam')]}],
+['輸出指令','複製後直接貼上',function(r){return [Q(r,'.side')]}]]}};
+Object.keys(SPEC).forEach(function(k){
+var r=__sh[k],sp=SPEC[k],pane=Q(r,'.pane'),N=sp.steps.length,cur=0;
+var st=document.createElement('style');st.textContent=CSS;r.appendChild(st);
+var sh=document.createElement('div');sh.className='x-shell';
+sh.innerHTML='<div class="x-bar"><i></i></div><div class="x-lay"><nav class="x-steps"></nav><section class="x-panel"><h2 class="x-pt"></h2><p class="x-ps"></p><div class="x-pb"></div><div class="x-pv" title="點一下前往輸出指令"></div><div class="x-nav"><button class="x-btn pv0">← 上一步</button><button class="x-btn nx">下一步 →</button></div></section></div>';
+var nav=Q(sh,'.x-steps'),pb=Q(sh,'.x-pb'),bodies=[];
+sp.steps.forEach(function(s,i){var b=document.createElement('button');b.className='x-st';b.textContent=(i+1)+' '+s[0];b.onclick=function(){go(i)};nav.appendChild(b);
+var d=document.createElement('div');d.className='x-body'+(k==='draw'&&i>=2&&i<=7?' solo':'');s[2](r).forEach(function(n){if(n)d.appendChild(n)});pb.appendChild(d);bodies.push(d)});
+pane.insertBefore(sh,pane.firstChild);
+var out=r.getElementById(sp.out),pv=Q(sh,'.x-pv');
+function upd(){pv.textContent='📋 目前指令預覽（點一下前往輸出）\n'+out.textContent}
+new MutationObserver(upd).observe(out,{childList:true,characterData:true,subtree:true});
+function go(i){cur=Math.max(0,Math.min(N-1,i));
+nav.querySelectorAll('.x-st').forEach(function(b,j){b.classList.toggle('on',j===cur)});
+bodies.forEach(function(b,j){b.classList.toggle('on',j===cur)});
+Q(sh,'.x-pt').textContent=(cur+1)+' '+sp.steps[cur][0];Q(sh,'.x-ps').textContent=sp.steps[cur][1];
+Q(sh,'.x-bar i').style.width=((cur+1)/N*100)+'%';
+pv.classList.toggle('off',cur===N-1);
+Q(sh,'.pv0').disabled=cur===0;Q(sh,'.nx').disabled=cur===N-1}
+Q(sh,'.pv0').onclick=function(){go(cur-1)};Q(sh,'.nx').onclick=function(){go(cur+1)};pv.onclick=function(){go(N-1)};
+upd();go(0)});
+})();
+</script>
 </body>
 </html>
